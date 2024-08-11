@@ -14,6 +14,8 @@ public class AccessControlManagementService {
     private static final EnumSet<Role> PROJECT_VIEW_ROLES = EnumSet.of(Role.SCRUM_MASTER, Role.MANAGER);
     private static final EnumSet<Role> MILESTONE_CREATE_ROLES = EnumSet.of(Role.MANAGER);
     private static final EnumSet<Role> MILESTONE_DELETE_ROLES = EnumSet.of(Role.MANAGER);
+    private static final EnumSet<Role> RESOURCE_CREATE_ROLES= EnumSet.of(Role.MANAGER);
+    private static final EnumSet<Role> RESOURCE_DELETE_ROLES= EnumSet.of(Role.MANAGER);
 
     public boolean canCreateTask(User user) {
         return TASK_CREATION_ROLES.contains(user.getRole());
@@ -41,6 +43,14 @@ public class AccessControlManagementService {
 
     public boolean canDeleteMilestone(User user) {
         return MILESTONE_DELETE_ROLES.contains(user.getRole());
+    }
+
+    public boolean canCreateResource(User user){
+        return RESOURCE_CREATE_ROLES.contains((user.getRole()));
+    }
+
+    public boolean canDeleteResource(User user){
+        return RESOURCE_DELETE_ROLES.contains(user.getRole());
     }
 
 }
