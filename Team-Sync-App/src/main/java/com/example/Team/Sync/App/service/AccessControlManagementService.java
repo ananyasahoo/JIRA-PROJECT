@@ -5,6 +5,8 @@ import com.example.Team.Sync.App.model.User.Role;
 
 import java.util.EnumSet;
 
+import org.springframework.stereotype.Service;
+@Service
 public class AccessControlManagementService {
 
     private static final EnumSet<Role> TASK_CREATION_ROLES = EnumSet.of(Role.SCRUM_MASTER, Role.DEVELOPER);
@@ -18,11 +20,11 @@ public class AccessControlManagementService {
     private static final EnumSet<Role> RESOURCE_DELETE_ROLES= EnumSet.of(Role.MANAGER);
 
     public boolean canCreateTask(User user) {
-        return TASK_CREATION_ROLES.contains(user.getRole());
+        return user.hasPermission("TASK_CREATION_ROLES");
     }
 
     public boolean canDeleteTask(User user) {
-        return TASK_DELETION_ROLES.contains(user.getRole());
+        return user.hasPermission("TASK_DELETION_ROLES");
     }
 
     public boolean canCreateProject(User user) {

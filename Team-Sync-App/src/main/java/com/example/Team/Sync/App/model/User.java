@@ -1,5 +1,7 @@
 package com.example.Team.Sync.App.model;
 
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +18,17 @@ public class User {
     private String password;
     private Role role;
     private Long department_id ;
-
+  private Set<String> permissions;
     public enum Role {
         SCRUM_MASTER,
         DEVELOPER,
         NORMAL_USER,
         TESTER,
         MANAGER
+    }
+
+    public boolean hasPermission(String permission) {
+        return permissions != null && permissions.contains(permission);
     }
 
 }

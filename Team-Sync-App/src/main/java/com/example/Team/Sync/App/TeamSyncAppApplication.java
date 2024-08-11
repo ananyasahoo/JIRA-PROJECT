@@ -1,12 +1,17 @@
 package com.example.Team.Sync.App;
 
+import com.example.Team.Sync.App.dao.ResourceAllocationDAO;
 import com.example.Team.Sync.App.dao.TaskDAO;
+import com.example.Team.Sync.App.model.Resource;
 import com.example.Team.Sync.App.model.Task;
 import com.example.Team.Sync.App.model.User;
 import com.example.Team.Sync.App.service.AccessControlManagementService;
+import com.example.Team.Sync.App.service.ResourceAllocationService;
 import com.example.Team.Sync.App.service.TaskService;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,24 +22,34 @@ public class TeamSyncAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TeamSyncAppApplication.class, args);
 
-		
+		// Initializing UserDAO, TaskDAO, and AccessControlManagementService
 		TaskDAO taskDAO = new TaskDAO();
-		User user = new User();
+		ResourceAllocationDAO resourceDAO = new ResourceAllocationDAO();
 		AccessControlManagementService accessControlManagementService = new AccessControlManagementService();
+
+		// Set permissions for the user
+		Set<String> permissions = new HashSet<>();
+		permissions.add("TASK_CREATION_ROLES");
+		permissions.add("TASK_DELETION_ROLES");
+		permissions.add("RESOURCE_CREATE_ROLES");
+		permissions.add("RESOURCE_DELETE_ROLES");
+
+		// Create a new user with the necessary permissions
+		User user = new User(1L, "adminUser", "admin@example.com", "1234567890", "password", User.Role.MANAGER, 1L,
+				permissions);
+		// Create TaskService
 		TaskService taskService = new TaskService(taskDAO, accessControlManagementService);
+		ResourceAllocationService resourceAllocationService = new ResourceAllocationService(resourceDAO,
+				accessControlManagementService);
 
-		// Create tasks
-		Task featureTask = taskService.createTask(user ,"feature", 1L, "Implement feature X", "Details about feature X", 101L, new Date());
-		Task bugTask = taskService.createTask(user, "bug", 1L, "Fix bug Y", "Details about bug Y", 102L, new Date());
+		// Create tasks using the user with the correct permissions
+		Task featureTask = taskService.createTask(user, "feature", 1L, "Implement feature X", "Details about feature X",
+				101L, new Date());
 
-		// Retrieve and update tasks
-		Task task = taskService.getTaskById(featureTask.getId());
-		System.out.println("Task: " + task.getTask_name());
-		taskService.updateTask(task.getId(), "Implement feature X - updated", "Updated details", "IN_PROGRESS", new Date());
-
-		// Delete task
-		boolean deleted = taskService.deleteTask(user,bugTask.getId());
-		System.out.println("Task deleted: " + deleted);
+		Resource resource = resourceAllocationService.createResource(user, 1L, true, "Java, Spring", "Day Shift",
+				featureTask.getId(), null);
+		boolean isDeletedResource= resourceAllocationService.deleteResource(user,	resource.getId() );
+		//System.out.println("Resource Allocated: " + resource.getId());
+		System.out.println(isDeletedResource+ "deleted");
 	}
-
 }

@@ -17,14 +17,13 @@ public class UserDAO {
         return  user;
     }
 
-    public User findUserById(String userName) {
-        for (User user : userDataBase.values()) {
-            if (user.getUser_name().equals(userName)) {
-                return user;
-            }
-        }
-        return null;
+    public User findUserByUserName(String userName) {
+        return userDataBase.values().stream()
+                .filter(user -> user.getUser_name().equals(userName))
+                .findFirst()
+                .orElse(null);
     }
+    
     public Map<Long, User> getUserDataBase() {
         return userDataBase;
     }
