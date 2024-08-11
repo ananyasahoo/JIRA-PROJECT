@@ -1,14 +1,9 @@
 package com.example.Team.Sync.App.service;
 
-import java.util.Date;
 
 import org.springframework.stereotype.Service;
-
-import com.example.Team.Sync.App.dao.ProjectSchedulerDAO;
 import com.example.Team.Sync.App.dao.ResourceAllocationDAO;
-import com.example.Team.Sync.App.factory.TaskFactory;
 import com.example.Team.Sync.App.model.Resource;
-import com.example.Team.Sync.App.model.Task;
 import com.example.Team.Sync.App.model.User;
 
 @Service

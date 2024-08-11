@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.Team.Sync.App.model.Milestone;
 import com.example.Team.Sync.App.model.Resource;
 
 @Repository
